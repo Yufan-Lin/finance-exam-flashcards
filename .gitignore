@@ -1,0 +1,9 @@
+.DS_Store
+exams/
+server.py
+.claude/
+*.md
+designs/
+skills/
+*.py
+src/data/*.json

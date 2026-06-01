@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XE8EH349RZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XE8EH349RZ');
+</script> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>金融證照試題練習 | 業務員資格測驗閃卡</title>
+<meta name="description" content="涵蓋金融市場常識、職業道德、保險實務、保險法規四科。透過閃卡模式練習，支援重點標記、錯題複習，隨時掌握備考進度。">
+<meta property="og:title" content="金融證照試題練習 | 業務員資格測驗閃卡">
+<meta property="og:description" content="涵蓋金融市場常識、職業道德、保險實務、保險法規四科。透過閃卡模式練習，支援重點標記、錯題複習，隨時掌握備考進度。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://yufan-lin.github.io/finance-exam-flashcards/src/imgs/金融證照試題OG圖.png">
+<meta property="og:url" content="https://yufan-lin.github.io/finance-exam-flashcards/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+<div class="sticky-top">
+<header class="hdr">
+  <div class="hdr-title-row">
+    <div class="hdr-cat-wrap">
+      <button class="hdr-cat-btn" type="button" onclick="openSubjectMenu()">
+        <span id="hdrCatLabel">載入中…</span>
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <select class="hdr-cat-sel" id="subjectSel" onchange="setSubject(this.value)"></select>
+      <div class="subj-popover" id="subjPopover"><div id="subjPopoverList"></div></div>
+    </div>
+    <button class="hdr-info-btn" type="button" onclick="openAnnouncement()" aria-label="公告">
+      <svg width="17" height="17" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
+        <!-- 主掌：心形翻轉（圓弧在下、尖端朝上對趾） -->
+        <path d="M 50 81 C 45 81 28 74 28 63 C 28 54 35 49 40 49 C 45 49 48 52 50 56 C 52 52 55 49 60 49 C 65 49 73 54 73 63 C 73 74 55 81 50 81 Z" transform="rotate(180 50 65)"/>
+        <!-- 內側趾球（較大，往外旋） -->
+        <ellipse cx="38" cy="33" rx="9" ry="11" transform="rotate(-10 38 33)"/>
+        <ellipse cx="62" cy="33" rx="9" ry="11" transform="rotate(10 62 33)"/>
+        <!-- 外側趾球（較小，略微傾斜） -->
+        <ellipse cx="19" cy="45" rx="7" ry="9" transform="rotate(-18 19 45)"/>
+        <ellipse cx="81" cy="45" rx="7" ry="9" transform="rotate(18 81 45)"/>
+      </svg>
+    </button>
+  </div>
+  <div class="hdr-nav-row">
+    <div class="seg-ctrl">
+      <div class="seg-thumb" id="segThumb"></div>
+      <button class="seg-btn" data-seg="all" type="button" onclick="setSegment('all')">
+        <span>全部</span><span class="seg-badge" id="segBadgeAll">0</span>
+      </button>
+      <button class="seg-btn" data-seg="review" type="button" onclick="setSegment('review')">
+        <span>複習</span><span class="seg-badge" id="segBadgeReview">0</span>
+      </button>
+      <button class="seg-btn" data-seg="key" type="button" onclick="setSegment('key')">
+        <span>精選</span><span class="seg-badge" id="segBadgeKey">0</span>
+      </button>
+      <button class="seg-btn" data-seg="star" type="button" onclick="setSegment('star')">
+        <span>星號</span><span class="seg-badge" id="segBadgeStar">0</span>
+      </button>
+    </div>
+    <div class="gear-popover-wrap">
+      <button class="hdr-gear-btn hdr-gear-desktop" type="button" onclick="openSettingsSheet()">
+        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M19.43 12.98c.04-.32.07-.65.07-.98s-.03-.66-.07-.98l2.11-1.65a.5.5 0 00.12-.64l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.3 7.3 0 00-1.69-.98l-.38-2.65A.5.5 0 0014 2h-4a.5.5 0 00-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.12.64L4.57 11.02c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65a.5.5 0 00-.12.64l2 3.46c.14.24.42.32.66.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.24.1.52.02.66-.22l2-3.46a.5.5 0 00-.12-.64l-2.11-1.65zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/>
+        </svg>
+      </button>
+      <div class="settings-popover" id="settingsPopover">
+        <div class="sheet-row hide-known-row" onclick="toggleHideKnown()">
+          <div class="sheet-row-left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>跳過已答對的題目</span>
+          </div>
+          <div class="ios-toggle toggle-hide-known"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="sheet-row" onclick="toggleShowSeen()">
+          <div class="sheet-row-left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+            </svg>
+            <span>標記已答過的題目</span>
+          </div>
+          <div class="ios-toggle toggle-show-seen"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="sheet-row" onclick="toggleShuffle()">
+          <div class="sheet-row-left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M16 3h5v5M4 20l17-17M4 4l5 5M14 14l7 7M21 16v5h-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>隨機出題</span>
+          </div>
+          <div class="ios-toggle toggle-shuffle"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="sheet-row" onclick="toggleShuffleOpts()">
+          <div class="sheet-row-left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 8h13M3 16h13M13 5l3 3-3 3M13 13l3 3-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>隨機選項順序</span>
+          </div>
+          <div class="ios-toggle toggle-shuffle-opts"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="sheet-row" onclick="toggleCardFx()">
+          <div class="sheet-row-left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>答題特效</span>
+          </div>
+          <div class="ios-toggle toggle-card-fx"><div class="toggle-knob"></div></div>
+        </div>
+        <button class="sheet-reset-btn" type="button" onclick="resetProgress()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 12a9 9 0 109-9c-2.5 0-4.8 1-6.5 2.8L3 8M3 3v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          重置作答紀錄
+        </button>
+      </div>
+    </div>
+    <button class="hdr-gear-btn hdr-gear-mobile" type="button" onclick="openSettingsSheet()">
+      <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M19.43 12.98c.04-.32.07-.65.07-.98s-.03-.66-.07-.98l2.11-1.65a.5.5 0 00.12-.64l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.3 7.3 0 00-1.69-.98l-.38-2.65A.5.5 0 0014 2h-4a.5.5 0 00-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.5.5 0 00.12.64L4.57 11.02c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65a.5.5 0 00-.12.64l2 3.46c.14.24.42.32.66.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.24.1.52.02.66-.22l2-3.46a.5.5 0 00-.12-.64l-2.11-1.65zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+<div class="progress-wrap">
+  <div class="progress-stats">
+    <span id="progressLabel">0 / 0</span>
+    <span id="pctLabel">0%</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-know"  id="progressKnow"  style="width:0%"></div>
+    <div class="progress-wrong" id="progressWrong" style="width:0%"></div>
+  </div>
+  <div class="score-pills">
+    <span class="pill">
+      <span class="pill-dot" style="background:var(--green-border)"></span>
+      <span id="knowCount">0</span> 答對
+    </span>
+    <span class="pill">
+      <span class="pill-dot" style="background:var(--red-border)"></span>
+      <span id="reviewCount">0</span> 答錯
+    </span>
+    <span class="pill">
+      <span class="pill-dot" style="background:var(--border-strong)"></span>
+      <span id="unseenCount">0</span> 未答
+    </span>
+    <span class="pill">
+      <span class="pill-dot" style="background:var(--star)"></span>
+      <span id="starCount">0</span> 星號
+    </span>
+  </div>
+</div>
+</div><!-- /sticky-top -->
+
+<main>
+
+  <!-- Error -->
+  <div class="error-box" id="errorBox">
+    <div style="font-size:48px">⚠️</div>
+    <div style="font-size:20px;font-weight:700">題庫載入失敗</div>
+    <p style="font-size:15px;color:var(--text-dim);line-height:1.7">
+      請重新整理頁面，若問題持續請截圖回報。
+    </p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="controls" id="controls">
+    <button class="ctrl-btn" id="btnPrev" onclick="prevCard()">← 上一題</button>
+    <button class="ctrl-btn" id="btnNext" onclick="nextCard()">下一題 →</button>
+  </div>
+
+  <!-- Card wrapper -->
+  <div id="cardStack">
+
+  <!-- Peek card: next/prev question revealed during swipe -->
+  <div class="card-wrap card-face card-front" id="cardPeek">
+    <div class="card-meta">
+      <span class="card-num" id="peekNum"></span>
+      <div class="meta-right">
+        <button class="star-btn" id="peekStarBtn"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></button>
+        <span class="section-badge" id="peekSectionBadge"></span>
+      </div>
+    </div>
+    <p class="question-text" id="peekText"></p>
+    <div class="options-list" id="peekOptions"></div>
+    <p class="select-hint">選擇你的答案</p>
+    <div class="explanation-block" id="peekExplanationBlock" style="display:none">
+      <div class="explanation-label">💡 解析</div>
+      <div class="explanation-text" id="peekExplanationText"></div>
+    </div>
+  </div>
+
+  <div class="card-wrap" id="cardWrap">
+
+    <!-- FRONT: question + clickable options -->
+    <div class="card-face card-front" id="cardFront">
+      <div class="card-meta">
+        <span class="card-num" id="cardNum"></span>
+        <div class="meta-right">
+          <button class="star-btn" id="starBtnFront" onclick="toggleStar()" title="標記星號"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></button>
+          <span class="section-badge" id="sectionBadge"></span>
+        </div>
+      </div>
+      <p class="question-text" id="questionText"></p>
+      <div class="options-list" id="optionsList"></div>
+      <p class="select-hint">選擇你的答案</p>
+    </div>
+
+    <!-- BACK: result + explanation -->
+    <div class="card-face card-back" id="cardBack" style="display:none">
+      <div class="card-meta">
+        <span class="card-num" id="cardNumBack"></span>
+        <div class="meta-right">
+          <button class="star-btn" id="starBtnBack" onclick="toggleStar()" title="標記星號"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></button>
+          <span class="section-badge" id="sectionBadgeBack"></span>
+        </div>
+      </div>
+      <p id="questionTextBack"
+         style="font-size:16px;line-height:1.65;color:var(--text-dim);font-weight:400"></p>
+<div class="result-options" id="resultOptions"></div>
+      <div class="explanation-block">
+        <div class="explanation-label">💡 解析</div>
+        <div class="explanation-text" id="explanationText"></div>
+      </div>
+    </div>
+
+  </div><!-- /card-wrap -->
+  </div><!-- /cardStack -->
+
+  <div class="kbd-hints" id="kbdHints">
+    <span class="kbd-hint"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> 選擇答案</span>
+    <span class="kbd-hint"><kbd>←</kbd><kbd>→</kbd> 上／下題</span>
+    <span class="kbd-hint"><kbd>S</kbd> 星號標記</span>
+  </div>
+
+  <!-- Done -->
+  <div class="done-screen" id="doneScreen">
+    <div class="done-icon">🎉</div>
+    <div class="done-title">本輪完成！</div>
+    <div id="doneSubtitle" style="color:var(--text-dim);font-size:14px"></div>
+    <div class="done-stats" id="doneStats"></div>
+    <div style="display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px">
+      <button class="btn active" onclick="restartDeck()">重新開始此科</button>
+      <button class="btn" id="doneRemoveKnownBtn" onclick="restartDeckRemoveKnown()">移除已答對再重新開始</button>
+      <button class="btn" id="doneReviewBtn" onclick="restartDeck('review')">複習此科答錯題</button>
+      <button class="btn star-filter" id="doneStarBtn" onclick="restartDeck('star')">此科星號題</button>
+    </div>
+  </div>
+
+</main>
+
+
+<div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSettingsSheet()">
+  <div class="sheet-panel" id="settingsSheetPanel" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">練習設定</div>
+    <div class="sheet-row hide-known-row" id="hideKnownRow" onclick="toggleHideKnown()">
+      <div class="sheet-row-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>跳過已答對的題目</span>
+      </div>
+      <div class="ios-toggle toggle-hide-known" id="hideKnownBtn"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="sheet-row" onclick="toggleShowSeen()">
+      <div class="sheet-row-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+        </svg>
+        <span>標記已答過的題目</span>
+      </div>
+      <div class="ios-toggle toggle-show-seen"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="sheet-row" onclick="toggleShuffle()">
+      <div class="sheet-row-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M16 3h5v5M4 20l17-17M4 4l5 5M14 14l7 7M21 16v5h-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>隨機出題</span>
+      </div>
+      <div class="ios-toggle toggle-shuffle" id="shuffleBtn"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="sheet-row" onclick="toggleShuffleOpts()">
+      <div class="sheet-row-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 8h13M3 16h13M13 5l3 3-3 3M13 13l3 3-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>隨機選項順序</span>
+      </div>
+      <div class="ios-toggle toggle-shuffle-opts"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="sheet-row" onclick="toggleCardFx()">
+      <div class="sheet-row-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>答題特效</span>
+      </div>
+      <div class="ios-toggle toggle-card-fx"><div class="toggle-knob"></div></div>
+    </div>
+    <button class="sheet-reset-btn" type="button" onclick="resetProgress()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 12a9 9 0 109-9c-2.5 0-4.8 1-6.5 2.8L3 8M3 3v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      重置作答紀錄
+    </button>
+  </div>
+</div>
+
+<div class="sheet-backdrop" id="subjSheetBackdrop" onclick="closeSubjectSheet()">
+  <div class="sheet-panel" id="subjSheetPanel" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">選擇科目</div>
+    <div id="subjSheetList"></div>
+  </div>
+</div>
+
+<div class="announce-backdrop" id="announceBackdrop" inert onclick="closeAnnouncement()">
+  <div class="announce-wrapper" onclick="event.stopPropagation()">
+    <img class="announce-shiba" src="src/imgs/shiba_sitting.png" alt="">
+    <div class="shiba-angry" id="shibaAngry">💢</div>
+    <div class="announce-panel" role="dialog" aria-modal="true">
+      <div class="announce-bubble">汪汪～汪汪～</div>
+      <div class="announce-footer">
+        <p class="announce-copyright">僅供本人學習筆記使用，請勿散播</p>
+        <p class="announce-version">v1.2606020131</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" inert>
+  <div class="modal-panel" role="alertdialog" aria-modal="true">
+    <p class="modal-msg" id="modalMsg"></p>
+    <div class="modal-actions">
+      <button class="modal-btn modal-cancel" id="modalCancel">取消</button>
+      <button class="modal-btn modal-ok" id="modalOk">確定</button>
+    </div>
+  </div>
+</div>
+
+<div id="safeAreaFill"></div>
+<script src="src/app.js"></script>
+</body>
+</html>
