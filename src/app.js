@@ -9,6 +9,8 @@ const SUBJECTS = [
   { key: 'law', section: '保險法規',     label: '保險法規',     category: '專業科目' },
   { key: 'fx',  section: '外幣保單',     label: '外幣保單',     category: '外幣證照' },
   { key: 'prop', section: '財產保險',    label: '財產保險',     category: '產險證照' },
+  { key: 'inv1', section: '投資型保險第一節', label: '投資型保險商品、金融體系概述', category: '投資型保險證照' },
+  { key: 'inv2', section: '投資型保險第二節', label: '投資學、債券證券評價、投資組合', category: '投資型保險證照' },
 ];
 const SUBJECT_MAP = Object.fromEntries(SUBJECTS.map(s => [s.key, s]));
 
@@ -43,6 +45,7 @@ const DATA_FILES = [
   'src/data/d4.enc',
   'src/data/d5.enc',
   'src/data/d6.enc',
+  'src/data/d7.enc',
 ];
 
 // AES-GCM 256-bit key — must match KEY_HEX in scripts/encrypt_data.py
@@ -373,7 +376,20 @@ const BADGE_MAP = {
   '職業道德':     ['共同｜職業道德',     'badge-p2'],
   '保險實務':     ['專業｜保險實務',     'badge-ins'],
   '保險法規':     ['專業｜保險法規',     'badge-law'],
+  '投資型保險第一節': ['投資｜第一節', 'badge-p1'],
+  '投資型保險第二節': ['投資｜第二節', 'badge-p2'],
 };
+
+// When options are shuffled, an explanation that cites option numbers like "故選(2)"
+// would point at the wrong displayed position. Remap "(1)"–"(4)" references to the
+// order in `optOrder` (the same array that labels the displayed options). When options
+// are not shuffled, optOrder is ['1','2','3','4'] and this is a no-op.
+function remapExplanation(text, optOrder) {
+  if (!text || !optOrder) return text;
+  const map = {};
+  optOrder.forEach((k, i) => { map[k] = String(i + 1); });
+  return text.replace(/\(([1-4])\)/g, (m, d) => (map[d] ? `(${map[d]})` : m));
+}
 
 function renderCard() {
   const doneScreen = document.getElementById('doneScreen');
@@ -464,7 +480,7 @@ const resultOpts = document.getElementById('resultOptions');
     });
 
     document.getElementById('explanationText').textContent =
-      q.explanation || '請參閱相關教材。';
+      remapExplanation(q.explanation, q._optOrder) || '請參閱相關教材。';
 
     renderStarBtns(q.id);
     document.getElementById('btnPrev').disabled = (currentIdx === 0);
@@ -864,7 +880,7 @@ document.addEventListener('keydown', e => {
       });
       if (hint) hint.style.display = 'none';
       peekTextEl.style.cssText = 'font-size:16px;line-height:1.65;color:var(--text-dim);font-weight:400';
-      expText.textContent = q.explanation || '請參閱相關教材。';
+      expText.textContent = remapExplanation(q.explanation, q._optOrder) || '請參閱相關教材。';
       expBlock.style.display = '';
     } else {
       optList.className = 'options-list';
