@@ -1014,8 +1014,8 @@ function updateSegBadge(id, value) {
 }
 
 // ── Announcement modal ───────────────────────────────────────────────────────
-const _bubbleMsgsDay   = ['汪汪～汪汪～', '肚子好餓...'];
-const _bubbleMsgsNight = ['Zzz....', '肉肉...好吃...'];
+const _bubbleMsgsDay   = ['汪汪～汪汪～', '肚子好餓...', '✅新增投資型考題'];
+const _bubbleMsgsNight = ['Zzz....', '肉肉...好吃...', '✅新增投資型考題'];
 let _bubbleMsgs = _bubbleMsgsDay;
 let _bubbleMsgIdx = 0;
 let _typewriterTimer = null;
