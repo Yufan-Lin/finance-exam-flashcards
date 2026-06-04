@@ -1014,10 +1014,20 @@ function updateSegBadge(id, value) {
 }
 
 // ── Announcement modal ───────────────────────────────────────────────────────
+const _bubbleSharedTips = [
+  '💡 長按「下一題」可跳到下一個未做過的題目！',
+  '💡 長按「上一題」可直接跳回第一題！',
+  '💡 長按「全部」可快速切換科目！',
+  '💡 長按「待複習」可清除複習進度重新開始！',
+  '💡 長按「星號」可清除目前科目的全部星號！',
+  '💡 左右滑動卡片可切換上一題 / 下一題！',
+];
 const _bubbleMsgsDay   = ['汪汪～汪汪～', '肚子好餓...', '✅新增投資型考題'];
 const _bubbleMsgsNight = ['Zzz....', '肉肉...好吃...', '✅新增投資型考題'];
+let _bubbleTips = [..._bubbleSharedTips, ..._bubbleMsgsDay];
 let _bubbleMsgs = _bubbleMsgsDay;
 let _bubbleMsgIdx = 0;
+let _lastTipIdx = -1;
 let _typewriterTimer = null;
 
 function _isTaipeiNight() {
@@ -1029,10 +1039,11 @@ function typewriteBubble(text) {
   const el = document.querySelector('.announce-bubble');
   if (_typewriterTimer) clearInterval(_typewriterTimer);
   el.textContent = '';
+  const chars = Array.from(text);
   let i = 0;
   _typewriterTimer = setInterval(() => {
-    el.textContent += text[i++];
-    if (i >= text.length) { clearInterval(_typewriterTimer); _typewriterTimer = null; }
+    el.textContent += chars[i++];
+    if (i >= chars.length) { clearInterval(_typewriterTimer); _typewriterTimer = null; }
   }, 80);
 }
 
@@ -1050,9 +1061,11 @@ function openAnnouncement() {
   document.body.style.width = '100%';
   const night = _isTaipeiNight();
   _bubbleMsgs = night ? _bubbleMsgsNight : _bubbleMsgsDay;
+  _bubbleTips = [..._bubbleSharedTips, ..._bubbleMsgs];
   const shibaEl = document.querySelector('.announce-shiba');
   shibaEl.src = night ? 'src/imgs/shiba_sleeping.png' : 'src/imgs/shiba_sitting.png';
   shibaEl.style.width = night ? '210px' : '';
+  shibaEl.classList.toggle('breathing', night);
   _bubbleMsgIdx = 0;
   document.querySelector('.announce-bubble').textContent = '';
   setTimeout(() => typewriteBubble(_bubbleMsgs[0]), 300);
@@ -1489,8 +1502,10 @@ addLongPress(document.querySelector('.seg-btn[data-seg="review"]'), async () => 
 addLongPress(document.querySelector('.seg-btn[data-seg="star"]'), resetStarsForSubject);
 
 document.querySelector('.announce-bubble').addEventListener('click', () => {
-  _bubbleMsgIdx = (_bubbleMsgIdx + 1) % _bubbleMsgs.length;
-  typewriteBubble(_bubbleMsgs[_bubbleMsgIdx]);
+  let idx;
+  do { idx = Math.floor(Math.random() * _bubbleTips.length); } while (idx === _lastTipIdx && _bubbleTips.length > 1);
+  _lastTipIdx = idx;
+  typewriteBubble(_bubbleTips[idx]);
 });
 function _spawnBone(shibaEl) {
   const rect = shibaEl.getBoundingClientRect();
@@ -1509,9 +1524,14 @@ function _spawnBone(shibaEl) {
 const _shibaClickTimes = [];
 document.querySelector('.announce-shiba').addEventListener('click', () => {
   const el = document.querySelector('.announce-shiba');
-  el.classList.remove('jelly');
+  const wasBreathing = el.classList.contains('breathing');
+  el.classList.remove('jelly', 'breathing');
   void el.offsetWidth;
   el.classList.add('jelly');
+  el.addEventListener('animationend', () => {
+    el.classList.remove('jelly');
+    if (wasBreathing) el.classList.add('breathing');
+  }, { once: true });
 
   const now = Date.now();
   _shibaClickTimes.push(now);
