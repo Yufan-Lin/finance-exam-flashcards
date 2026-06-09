@@ -336,9 +336,21 @@
     <div class="shiba-angry" id="shibaAngry">💢</div>
     <div class="announce-panel" role="dialog" aria-modal="true">
       <div class="announce-bubble">汪汪～汪汪～</div>
+      <form class="announce-feedback-form" id="feedbackForm">
+        <div class="feedback-input-row" id="feedbackInputRow">
+          <textarea id="feedbackInput" rows="1" maxlength="500"
+            placeholder="給作者的悄悄話（匿名）"></textarea>
+          <button type="submit" class="feedback-send" id="feedbackSend">送出</button>
+        </div>
+        <div class="feedback-sent" id="feedbackSent" hidden>
+          <span class="feedback-sent-msg">✅ 已送出，謝謝你的悄悄話！</span>
+          <span class="feedback-cd" id="feedbackCd"></span>
+        </div>
+        <p class="feedback-status" id="feedbackStatus" aria-live="polite"></p>
+      </form>
       <div class="announce-footer">
         <p class="announce-copyright">僅供本人學習筆記使用，請勿散播</p>
-        <p class="announce-version">v1.2606050119</p>
+        <p class="announce-version">v1.2606100242</p>
       </div>
     </div>
   </div>
@@ -355,6 +367,42 @@
 </div>
 
 <div id="safeAreaFill"></div>
+
+<!-- Firebase Realtime Database — 使用者意見回饋 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app-check.js";
+  import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDSZT_4L37QTqI6j0d6eItUWX4nwvM_ZrE",
+    authDomain: "finance-exam-flashcards.firebaseapp.com",
+    databaseURL: "https://finance-exam-flashcards-default-rtdb.firebaseio.com",
+    projectId: "finance-exam-flashcards",
+    storageBucket: "finance-exam-flashcards.firebasestorage.app",
+    messagingSenderId: "163681395981",
+    appId: "1:163681395981:web:6e4b8e6e58fa51945bfc44",
+    measurementId: "G-YT19RVFZPB"
+  };
+
+  // 本機測試時取得 debug token：到 Console → App Check 註冊它（見下方說明）
+  // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+
+  const app = initializeApp(firebaseConfig);
+
+  // App Check：用 reCAPTCHA v3 驗證請求確實來自本站，擋掉腳本濫用/洗頻
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider("6LdwFhYtAAAAACE8lM6i7pwWsh2V33tzhef3W7di"),  // reCAPTCHA v3 網站金鑰
+    isTokenAutoRefreshEnabled: true,
+  });
+
+  const db = getDatabase(app);
+
+  // 暴露給 app.js 呼叫：push 一筆建議到 /feedback，key 由 push 自動產生（含時間序）
+  window.firebaseSendFeedback = (message, meta = {}) =>
+    push(ref(db, 'feedback'), { message, createdAt: serverTimestamp(), ...meta });
+</script>
+
 <script src="src/app.js"></script>
 </body>
 </html>

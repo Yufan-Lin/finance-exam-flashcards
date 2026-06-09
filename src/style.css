@@ -1102,6 +1102,81 @@
   }
   .announce-feedback:hover { background: var(--surface2); }
   .announce-feedback svg { flex-shrink: 0; }
+  .announce-feedback-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+  }
+  .feedback-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 5px 5px 5px 14px;
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+  .feedback-input-row:focus-within { border-color: var(--accent); }
+  .announce-feedback-form textarea {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    resize: none;
+    height: 34px;
+    max-height: 120px;
+    border: 0;
+    background: transparent;
+    padding: 7px 0;
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text);
+    outline: none;
+  }
+  .announce-feedback-form textarea::placeholder { color: var(--text-muted); }
+  .feedback-send {
+    flex-shrink: 0;
+    align-self: flex-end;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 16px;
+    height: 34px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .feedback-send:hover { opacity: 0.92; }
+  .feedback-send:active { transform: scale(0.97); }
+  .feedback-send:disabled { opacity: 0.55; cursor: default; }
+  /* hidden 屬性需蓋過 .feedback-* 的 display:flex，否則無法切換隱藏 */
+  .feedback-input-row[hidden],
+  .feedback-sent[hidden] { display: none; }
+  .feedback-sent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 14px;
+    background: var(--bg);
+    text-align: center;
+  }
+  .feedback-sent-msg { font-size: 14px; font-weight: 600; color: #1f8a4c; }
+  .feedback-cd { font-size: 12px; color: var(--text-muted); }
+  .feedback-status {
+    font-size: 13px;
+    text-align: center;
+    margin: 0;
+  }
+  .feedback-status.success,
+  .feedback-status.error { margin-top: 6px; }
+  .feedback-status.success { color: #1f8a4c; }
+  .feedback-status.error   { color: #d93838; }
   .announce-footer {
     display: flex;
     flex-direction: column;

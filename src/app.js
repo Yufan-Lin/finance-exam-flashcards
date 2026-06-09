@@ -1507,6 +1507,78 @@ document.querySelector('.announce-bubble').addEventListener('click', () => {
   _lastTipIdx = idx;
   typewriteBubble(_bubbleTips[idx]);
 });
+
+// ── 意見回饋表單 → Firebase Realtime Database ──────────────────────────────────
+const FEEDBACK_CD_MS = 60_000;        // 送出後 60 秒冷卻
+const _feedbackInput    = document.getElementById('feedbackInput');
+const _feedbackInputRow = document.getElementById('feedbackInputRow');
+const _feedbackSent     = document.getElementById('feedbackSent');
+const _feedbackCd       = document.getElementById('feedbackCd');
+let _feedbackCdTimer = null;
+
+function _autoGrowFeedback() {
+  _feedbackInput.style.height = 'auto';
+  _feedbackInput.style.height = Math.min(_feedbackInput.scrollHeight, 120) + 'px';
+}
+_feedbackInput.addEventListener('input', _autoGrowFeedback);
+
+function _feedbackCdEnd() {
+  return parseInt(localStorage.getItem('flashcard_feedback_cd') || '0', 10);
+}
+function _tickFeedbackCd() {
+  const remain = _feedbackCdEnd() - Date.now();
+  if (remain <= 0) {
+    if (_feedbackCdTimer) { clearInterval(_feedbackCdTimer); _feedbackCdTimer = null; }
+    _feedbackSent.hidden = true;
+    _feedbackInputRow.hidden = false;
+    return;
+  }
+  _feedbackInputRow.hidden = true;
+  _feedbackSent.hidden = false;
+  _feedbackCd.textContent = `${Math.ceil(remain / 1000)} 秒後可再傳送`;
+}
+function _refreshFeedbackCd() {
+  if (_feedbackCdTimer) { clearInterval(_feedbackCdTimer); _feedbackCdTimer = null; }
+  _tickFeedbackCd();
+  if (_feedbackCdEnd() > Date.now()) _feedbackCdTimer = setInterval(_tickFeedbackCd, 1000);
+}
+_refreshFeedbackCd();   // 頁面載入時若仍在冷卻中，直接顯示倒數狀態
+
+document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const input   = _feedbackInput;
+  const sendBtn = document.getElementById('feedbackSend');
+  const status  = document.getElementById('feedbackStatus');
+  const message = input.value.trim();
+  if (!message) { input.focus(); return; }
+  if (typeof window.firebaseSendFeedback !== 'function') {
+    status.textContent = '⚠️ 連線初始化中，請稍候再試一次';
+    status.className = 'feedback-status error';
+    return;
+  }
+  sendBtn.disabled = true;
+  sendBtn.textContent = '送出中…';
+  status.textContent = '';
+  status.className = 'feedback-status';
+  try {
+    await window.firebaseSendFeedback(message, {
+      subject: activeSubject,
+      version: (document.querySelector('.announce-version')?.textContent || '').trim(),
+      ua: navigator.userAgent,
+    });
+    input.value = '';
+    _autoGrowFeedback();
+    localStorage.setItem('flashcard_feedback_cd', String(Date.now() + FEEDBACK_CD_MS));
+    _refreshFeedbackCd();   // 切換成「已送出 + 倒數」
+  } catch (err) {
+    console.error('feedback send failed', err);
+    status.textContent = '⚠️ 送出失敗，請稍後再試';
+    status.className = 'feedback-status error';
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = '送出';
+  }
+});
 function _spawnBone(shibaEl) {
   const rect = shibaEl.getBoundingClientRect();
   const el = document.createElement('span');
